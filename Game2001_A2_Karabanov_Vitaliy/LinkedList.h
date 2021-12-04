@@ -21,6 +21,14 @@ private:
 public:
 	friend class LinkedIterator <T>;
 	friend class LinkedList <T>;
+	T getData()
+	{
+		return m_data;
+	}
+	short getPriority()
+	{
+		return m_priority;
+	}
 };
 
 //////////////////////////////////////////////////////////////////
@@ -139,49 +147,49 @@ public:
 	/////////////////////////////////////////////////////////////
 	//priority funcs
 
-	void InsertBefore(LinkedIterator<T>& it, T newData, short prior)
+	void InsertBefore(LinkedIterator<T>& x, T newData, short prior)
 	{
-		assert(it.m_node != nullptr);
+		assert(x.m_node != nullptr);
 
 		LinkedNode<T>* node = new LinkedNode<T>;
 		assert(node != nullptr);
 
 		node->m_priority = prior;
 		node->m_data = newData;
-		node->m_next = it.m_node;
-		node->m_previous = it.m_node->m_previous;
+		node->m_next = x.m_node;
+		node->m_previous = x.m_node->m_previous;
 
 		if (node->m_previous != nullptr)
 			node->m_previous->m_next = node;
 
-		it.m_node->m_previous = node;
+		x.m_node->m_previous = node;
 
 
-		if (it.m_node == m_rootNode)
+		if (x.m_node == m_rootNode)
 			m_rootNode = node;
 
 
 		m_size++;
 	}
-	void InsertAfter(LinkedIterator<T>& it, T newData, short prior)
+	void InsertAfter(LinkedIterator<T>& x, T newData, short prior)
 	{
-		assert(it.m_node != nullptr);
+		assert(x.m_node != nullptr);
 
 		LinkedNode<T>* node = new LinkedNode<T>;
 		assert(node != nullptr);
 
 		node->m_priority = prior;
 		node->m_data = newData;
-		node->m_next = it.m_node->m_next;
-		node->m_previous = it.m_node;
+		node->m_next = x.m_node->m_next;
+		node->m_previous = x.m_node;
 
 		if (node->m_next != nullptr)
 			node->m_next->m_previous = node;
 
 
-		it.m_node->m_next = node;
+		x.m_node->m_next = node;
 
-		if (it.m_node == m_lastNode)
+		if (x.m_node == m_lastNode)
 			m_lastNode = node;
 
 
@@ -243,12 +251,55 @@ template <class T>
 class PriorQ
 {
 private:
-
+	LinkedList<T> m_elements;
+	short m_size;
 public:
-	PriorQ()
+	PriorQ(short size)
 	{
+		assert(size > 0);
+		m_size = size;
 	}
 	~PriorQ() {}
 	//                  PRIORITY QUEUE FUNCTIONS
 	/////////////////////////////////////////////////////////////////
+	void Pop()
+	{
+		m_elements.Pop();
+	}
+	void Push(T val, short priority)
+	{
+		assert(m_elements.getSize() < m_size);
+
+		if (m_elements.getSize() == 0)
+			m_elements.PushBack(val, priority);
+
+		else
+		{
+			LinkedIterator<T> x;
+			x = m_elements.Begin();
+
+			while (x != nullptr)
+			{
+				if (x.GetNode()->getPriority() > priority)
+					break;
+
+				x++;
+			}
+
+			if (x != nullptr)
+				m_elements.InsertBefore(x, val, priority);
+
+			else
+				m_elements.PushBack(val, priority);
+		}
+	}
+	LinkedNode<T>* Front()
+	{
+		return m_elements.Begin();
+	}
+
+	int getSize()
+	{
+		return m_elements.getSize();
+	}
 };

@@ -3,24 +3,32 @@
 using namespace std;
 int main()
 {
-	LinkedList <short> it;
-	it.PushBack(111,1);
-	it.PushBack(222,1);
-	it.PushBack(333,1);
+	PriorQ<string> myQ(10);
 
-	
-	LinkedIterator<short> x;
+	cout << "         Check that pop() delete the first element first of all :" << endl << endl;
 
-	for (x = it.Begin(); x != it.End(); x++)
+	myQ.Push("First data entered (means doesn't work)", 1);
+	myQ.Push("2nd data entered (means works)", 1);
+	myQ.Pop();
+	cout << "***********************************************************" << endl;
+	cout << "|   " << myQ.Front()->getData() << endl << endl;
+	cout << "***********************************************************" << endl << endl << endl;
+	myQ.Pop();
+
+	cout << "         Priority Q in words: \n \n";
+	myQ.Push("This ", 1);
+	myQ.Push("Work ", 3);
+	myQ.Push("Queue ", 2);
+	myQ.Push("Should ", 2);
+	myQ.Push("Priority ", 1);
+
+	cout << "*************************************************************************************" << endl;
+	while (myQ.getSize() > 0)
 	{
-		cout << " " << *x << endl;
+		cout << "|   " << myQ.Front()->getData() << "( " << myQ.Front()->getPriority() << " ) ";
+		myQ.Pop();
 	}
-	it.Pop();
-	cout << "Now after pop(front)" << endl;
+	cout << "  |\n*************************************************************************************" << endl;
 
-	for (x = it.Begin(); x != it.End(); x++)
-	{
-		cout << " " << *x << endl;
-	}
 	return 0;
 }
