@@ -4,9 +4,9 @@ using namespace std;
 int main()
 {
 	LinkedList <short> it;
-	it.PushBack(111);
-	it.PushBack(222);
-	it.PushBack(333);
+	it.PushBack(111,1);
+	it.PushBack(222,1);
+	it.PushBack(333,1);
 
 	
 	LinkedIterator<short> x;

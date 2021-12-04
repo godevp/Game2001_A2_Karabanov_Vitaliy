@@ -17,6 +17,7 @@ private:
 	T m_data;
 	LinkedNode* m_next;
 	LinkedNode* m_previous;
+	short m_priority;
 public:
 	friend class LinkedIterator <T>;
 	friend class LinkedList <T>;
@@ -136,7 +137,56 @@ public:
 		return m_lastNode;										   //////////////////////////
 	}															   //////////////////////////
 	/////////////////////////////////////////////////////////////
+	//priority funcs
 
+	void InsertBefore(LinkedIterator<T>& it, T newData, short prior)
+	{
+		assert(it.m_node != nullptr);
+
+		LinkedNode<T>* node = new LinkedNode<T>;
+		assert(node != nullptr);
+
+		node->m_priority = prior;
+		node->m_data = newData;
+		node->m_next = it.m_node;
+		node->m_previous = it.m_node->m_previous;
+
+		if (node->m_previous != nullptr)
+			node->m_previous->m_next = node;
+
+		it.m_node->m_previous = node;
+
+
+		if (it.m_node == m_rootNode)
+			m_rootNode = node;
+
+
+		m_size++;
+	}
+	void InsertAfter(LinkedIterator<T>& it, T newData, short prior)
+	{
+		assert(it.m_node != nullptr);
+
+		LinkedNode<T>* node = new LinkedNode<T>;
+		assert(node != nullptr);
+
+		node->m_priority = prior;
+		node->m_data = newData;
+		node->m_next = it.m_node->m_next;
+		node->m_previous = it.m_node;
+
+		if (node->m_next != nullptr)
+			node->m_next->m_previous = node;
+
+
+		it.m_node->m_next = node;
+
+		if (it.m_node == m_lastNode)
+			m_lastNode = node;
+
+
+		m_size++;
+	}
 
 	// Main Funcs of the linked list
 	/////////////////////////////////////////////////////////////
@@ -159,11 +209,12 @@ public:
 	}
 
 
-	void PushBack(T newData)
+	void PushBack(T newData, short priority)
 	{
 		LinkedNode<T>* node = new LinkedNode<T>;
 
 		assert(node != nullptr);
+		node->m_priority = priority;
 		node->m_data = newData;
 		node->m_next = nullptr;
 		node->m_previous = nullptr;
